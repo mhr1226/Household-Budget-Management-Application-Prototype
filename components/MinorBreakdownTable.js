@@ -24,7 +24,6 @@ export default function MinorBreakdownTable({ summary }) {
       <thead>
         <tr>
           <th>分類</th>
-          <th className="num">件数</th>
           <th className="num">金額</th>
           <th className="num">構成比</th>
         </tr>
@@ -51,14 +50,12 @@ function MajorGroup({ group, majorTotal, expense }) {
           <span className="swatch" style={{ background: MAJOR_COLORS[group.major] || '#999' }} />
           {group.major}
         </td>
-        <td className="num">{group.rows.reduce((s, r) => s + r.count, 0)}</td>
         <td className="num">{yen(majorTotal)}</td>
         <td className="num">{expense ? percent(majorTotal / expense) : '—'}</td>
       </tr>
       {group.rows.map((r) => (
         <tr key={`${r.major}|${r.minor}`}>
           <td style={{ paddingLeft: 24 }}>{r.minor}</td>
-          <td className="num">{r.count}</td>
           <td className="num">{yen(r.amount)}</td>
           <td className="num">{expense ? percent(r.amount / expense) : '—'}</td>
         </tr>
