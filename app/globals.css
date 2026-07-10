@@ -310,6 +310,29 @@ textarea {
   margin-bottom: 16px;
 }
 
+.reflection-form.editing {
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 14px;
+  background: var(--accent-soft);
+}
+
+.reflection-cat-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reflection-cat-fields .field {
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+
+.reflection-cat-fields select {
+  width: 100%;
+  min-width: 0;
+}
+
 .reflection-fields {
   display: flex;
   flex-wrap: wrap;
@@ -345,11 +368,17 @@ textarea {
   background: #fcfcfd;
 }
 
+.reflection-item.is-editing {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
 .reflection-item-head {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 4px;
+  flex-wrap: wrap;
 }
 
 .reflection-cat {
@@ -361,13 +390,44 @@ textarea {
   border-radius: 999px;
 }
 
+.reflection-sub {
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
 .reflection-date {
   font-size: 12px;
   color: var(--muted);
 }
 
-.reflection-del {
+.reflection-actions {
   margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.reflection-edit {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--accent);
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.reflection-edit:hover {
+  border-color: var(--accent);
+}
+
+.reflection-del {
   appearance: none;
   border: none;
   background: none;
@@ -406,6 +466,11 @@ textarea {
 .reflection-label.improve {
   background: #e9f6ee;
   color: #1f9d55;
+}
+
+.reflection-label.result {
+  background: #eef1f6;
+  color: #48566b;
 }
 
 .reflection-block p {
