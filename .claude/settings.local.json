@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npm install 2>&1)",
+      "PowerShell(node scripts/verify-june.mjs)",
+      "PowerShell(node scripts/seed-june.mjs)",
+      "PowerShell(node scripts/seed.mjs \"C:/Users/user/Downloads/Zaim.2026.6����.csv\" \"C:/Users/user/Downloads/moneyFoward.2026.6����.csv\" \"C:/Users/user/Downloads/Zaim.20260711011436.csv\" \"C:/Users/user/Downloads/�����E�x�o�ڍ�_2026-05-01_2026-05-31.csv\")",
+      "PowerShell(node scripts/verify.mjs)"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+/node_modules
+/.next
+/out
+npm-debug.log*
+.DS_Store
+
+# 家計データは外部に出さない。サンプル以外の実データはコミットしない場合はここで無視する。
+# /data/transactions.json
+# /data/reflections.json
