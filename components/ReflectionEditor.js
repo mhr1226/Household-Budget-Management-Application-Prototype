@@ -2,55 +2,85 @@
 
 import { useState } from 'react';
 import { monthLabel } from '@/lib/format';
-import { MAJOR_CATEGORIES } from '@/lib/mapping';
-
-// カテゴリ入力の候補（自由入力も可）。元集計表の反省シートに倣い、大分類＋総評を出す。
-const CATEGORY_SUGGESTIONS = [...MAJOR_CATEGORIES, '総評'];
+import { CATEGORY_TREE, REFLECTION_MAJORS } from '@/lib/mapping';
 
 // リストがこの件数を超えたら「もっと見る」で折りたたむ。
 const COLLAPSED_COUNT = 3;
 
+const EMPTY_FORM = { major: '', minor: '', reflection: '', improvement: '', result: '' };
+
 export default function ReflectionEditor({ month, entries, onChange }) {
-  const [category, setCategory] = useState('');
-  const [reflection, setReflection] = useState('');
-  const [improvement, setImprovement] = useState('');
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [editingId, setEditingId] = useState(null); // null=新規追加, それ以外=編集中のエントリid
   const [status, setStatus] = useState(null);
   const [saving, setSaving] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
-  const list = entries || [];
+  // 万一データが配列でない場合でも UI を壊さない（不正データの防御）。
+  const list = Array.isArray(entries) ? entries : [];
   // 新しく追加したものを上に表示する。
   const ordered = [...list].reverse();
   const visible = expanded ? ordered : ordered.slice(0, COLLAPSED_COUNT);
   const hiddenCount = ordered.length - visible.length;
 
-  async function add() {
+  // 選択中の大分類に対応する小分類の候補。
+  const minorOptions = CATEGORY_TREE[form.major] || [];
+
+  function setField(key, value) {
+    setForm((f) => {
+      const next = { ...f, [key]: value };
+      // 大分類を変えたら、対応しない小分類はクリアする。
+      if (key === 'major') {
+        const allowed = CATEGORY_TREE[value] || [];
+        if (!allowed.includes(next.minor)) next.minor = '';
+      }
+      return next;
+    });
+  }
+
+  function resetForm() {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+  }
+
+  function startEdit(e) {
+    setForm({
+      major: e.major || '',
+      minor: e.minor || '',
+      reflection: e.reflection || '',
+      improvement: e.improvement || '',
+      result: e.result || '',
+    });
+    setEditingId(e.id);
+    setStatus(null);
+  }
+
+  async function submit() {
     if (!month) return;
-    const cat = category.trim();
-    if (!cat) {
-      setStatus({ type: 'err', text: 'カテゴリを入力してください。' });
+    if (!form.major.trim()) {
+      setStatus({ type: 'err', text: 'カテゴリ（大分類）を選択してください。' });
       return;
     }
-    if (!reflection.trim() && !improvement.trim()) {
-      setStatus({ type: 'err', text: '反省点か改善点のどちらかを入力してください。' });
+    if (!form.reflection.trim() && !form.improvement.trim() && !form.result.trim()) {
+      setStatus({ type: 'err', text: '反省点・改善点・結果のいずれかを入力してください。' });
       return;
     }
     setSaving(true);
     setStatus(null);
     try {
+      const editing = editingId != null;
       const res = await fetch('/api/reflections', {
-        method: 'POST',
+        method: editing ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ month, entry: { category: cat, reflection, improvement } }),
+        body: JSON.stringify(
+          editing ? { month, id: editingId, entry: form } : { month, entry: form }
+        ),
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || '保存に失敗しました');
       onChange?.(data.reflections);
-      // フォームをクリアして、続けて追加できるようにする。
-      setCategory('');
-      setReflection('');
-      setImprovement('');
-      setStatus({ type: 'ok', text: '追加しました。' });
+      resetForm();
+      setStatus({ type: 'ok', text: editing ? '更新しました。' : '追加しました。' });
     } catch (e) {
       setStatus({ type: 'err', text: `保存エラー: ${e.message}` });
     } finally {
@@ -68,55 +98,89 @@ export default function ReflectionEditor({ month, entries, onChange }) {
       });
       const data = await res.json();
       if (!data.ok) throw new Error(data.error || '削除に失敗しました');
+      // 編集中のエントリを消したらフォームも初期化する。
+      if (editingId === id) resetForm();
       onChange?.(data.reflections);
     } catch (e) {
       setStatus({ type: 'err', text: `削除エラー: ${e.message}` });
     }
   }
 
+  const editing = editingId != null;
+
   return (
     <div className="panel">
       <h2>{monthLabel(month)} の反省</h2>
 
-      {/* 入力フォーム：カテゴリ・反省点・改善点を付けて1件ずつ追加する */}
-      <div className="reflection-form">
-        <label className="field" style={{ maxWidth: 300 }}>
-          カテゴリ
-          <input
-            type="text"
-            list="reflection-categories"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            placeholder="固定費・サブスク / 娯楽 / 総評 …"
-          />
-          <datalist id="reflection-categories">
-            {CATEGORY_SUGGESTIONS.map((c) => (
-              <option key={c} value={c} />
-            ))}
-          </datalist>
-        </label>
+      {/* 入力フォーム：カテゴリ（大分類／小分類）・反省点・改善点・結果を付けて登録する */}
+      <div className={`reflection-form ${editing ? 'editing' : ''}`}>
+        <div className="reflection-cat-fields">
+          <label className="field">
+            大分類
+            <select value={form.major} onChange={(e) => setField('major', e.target.value)}>
+              <option value="">選択してください</option>
+              {REFLECTION_MAJORS.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="field">
+            小分類
+            <select
+              value={form.minor}
+              onChange={(e) => setField('minor', e.target.value)}
+              disabled={minorOptions.length === 0}
+            >
+              <option value="">{minorOptions.length === 0 ? '（なし）' : '（指定なし）'}</option>
+              {minorOptions.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
         <div className="reflection-fields">
           <label className="field grow">
             反省点
             <textarea
-              value={reflection}
-              onChange={(e) => setReflection(e.target.value)}
+              value={form.reflection}
+              onChange={(e) => setField('reflection', e.target.value)}
               placeholder="気づいた反省点…"
             />
           </label>
           <label className="field grow">
             改善点
             <textarea
-              value={improvement}
-              onChange={(e) => setImprovement(e.target.value)}
+              value={form.improvement}
+              onChange={(e) => setField('improvement', e.target.value)}
               placeholder="次に向けた改善点…"
             />
           </label>
         </div>
+
+        <label className="field">
+          結果
+          <input
+            type="text"
+            value={form.result}
+            onChange={(e) => setField('result', e.target.value)}
+            placeholder="結果：約4000円多めの支出 など"
+          />
+        </label>
+
         <div className="reflection-foot">
-          <button className="btn" onClick={add} disabled={saving || !month}>
-            追加
+          <button className="btn" onClick={submit} disabled={saving || !month}>
+            {editing ? '更新' : '追加'}
           </button>
+          {editing && (
+            <button className="btn ghost" onClick={resetForm} disabled={saving}>
+              キャンセル
+            </button>
+          )}
           {status && <span className={`status ${status.type}`}>{status.text}</span>}
         </div>
       </div>
@@ -130,13 +194,23 @@ export default function ReflectionEditor({ month, entries, onChange }) {
         <>
           <ul className="reflection-list">
             {visible.map((e) => (
-              <li key={e.id} className="reflection-item">
+              <li
+                key={e.id}
+                className={`reflection-item ${editingId === e.id ? 'is-editing' : ''}`}
+              >
                 <div className="reflection-item-head">
-                  <span className="reflection-cat">{e.category}</span>
+                  <span className="reflection-cat">{e.major}</span>
+                  {e.minor && <span className="reflection-sub">{e.minor}</span>}
                   {e.createdAt && <span className="reflection-date">{formatDate(e.createdAt)}</span>}
-                  <button className="reflection-del" onClick={() => remove(e.id)} title="削除">
-                    ×
-                  </button>
+                  {e.updatedAt && <span className="reflection-date">（編集済）</span>}
+                  <span className="reflection-actions">
+                    <button className="reflection-edit" onClick={() => startEdit(e)} title="編集">
+                      編集
+                    </button>
+                    <button className="reflection-del" onClick={() => remove(e.id)} title="削除">
+                      ×
+                    </button>
+                  </span>
                 </div>
                 {e.reflection && (
                   <div className="reflection-block">
@@ -148,6 +222,12 @@ export default function ReflectionEditor({ month, entries, onChange }) {
                   <div className="reflection-block">
                     <span className="reflection-label improve">改善点</span>
                     <p>{e.improvement}</p>
+                  </div>
+                )}
+                {e.result && (
+                  <div className="reflection-block">
+                    <span className="reflection-label result">結果</span>
+                    <p>{e.result}</p>
                   </div>
                 )}
               </li>
