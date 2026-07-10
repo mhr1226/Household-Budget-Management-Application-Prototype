@@ -5,7 +5,13 @@
       "PowerShell(node scripts/verify-june.mjs)",
       "PowerShell(node scripts/seed-june.mjs)",
       "PowerShell(node scripts/seed.mjs \"C:/Users/user/Downloads/Zaim.2026.6����.csv\" \"C:/Users/user/Downloads/moneyFoward.2026.6����.csv\" \"C:/Users/user/Downloads/Zaim.20260711011436.csv\" \"C:/Users/user/Downloads/�����E�x�o�ڍ�_2026-05-01_2026-05-31.csv\")",
-      "PowerShell(node scripts/verify.mjs)"
+      "PowerShell(node scripts/verify.mjs)",
+      "Bash(python -c \"import pypdf; print\\('ok'\\)\")",
+      "Bash(python -c \"import fitz; print\\('pymupdf ok'\\)\")",
+      "Bash(pip install *)",
+      "Bash(python -c ' *)",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('scripts:', d.get\\('scripts'\\)\\)\")",
+      "Bash(python -c \"import json; d=json.load\\(open\\('data/transactions.json',encoding='utf-8'\\)\\); t=d if isinstance\\(d,list\\) else d.get\\('transactions',[]\\); print\\('tx count', len\\(t\\)\\); print\\('sample', t[0] if t else None\\)\")"
     ]
   }
 }

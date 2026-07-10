@@ -123,8 +123,8 @@ export default function BudgetApp() {
               </div>
               <ReflectionEditor
                 month={selectedMonth}
-                value={reflections[selectedMonth] || ''}
-                onSaved={(m, text) => setReflections((prev) => ({ ...prev, [m]: text }))}
+                entries={reflections[selectedMonth] || []}
+                onChange={(updated) => setReflections(updated)}
               />
             </>
           )}
