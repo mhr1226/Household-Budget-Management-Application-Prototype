@@ -5,19 +5,42 @@ import {
   updateReflectionEntry,
   deleteReflectionEntry,
 } from '@/lib/storage';
+import { EXCESS_REASONS } from '@/lib/mapping';
 
 // 入力エントリを検証して整形する。問題があれば { error } を返す。
+// 反省点・改善点は必須。超過支出フラグが立っているときは金額（1以上の整数）と
+// 理由タグ（EXCESS_REASONS のいずれか）も必須にする。
 function parseEntry(entry) {
   const major = String(entry?.major || '').trim();
   const minor = String(entry?.minor || '').trim();
   const reflection = String(entry?.reflection ?? '').trim();
   const improvement = String(entry?.improvement ?? '').trim();
-  const result = String(entry?.result ?? '').trim();
+  const itemName = String(entry?.itemName ?? '').trim(); // 品名（任意）
+  const isExcess = entry?.isExcess === true;
+
   if (!major) return { error: 'カテゴリ（大分類）を選択してください' };
-  if (!reflection && !improvement && !result) {
-    return { error: '反省点・改善点・結果のいずれかを入力してください' };
+  if (!reflection) return { error: '反省点を入力してください' };
+  if (!improvement) return { error: '改善点を入力してください' };
+
+  // 超過でなければ金額・理由は保存しない（0 と空文字に正規化する）。
+  let excessAmount = 0;
+  let excessReason = '';
+  if (isExcess) {
+    const amount = Number(entry?.excessAmount);
+    // 0・負数・小数・非数はすべて弾く（1以上の整数のみ許可）。
+    if (!Number.isInteger(amount) || amount < 1) {
+      return { error: '超過額は1以上の整数で入力してください' };
+    }
+    excessAmount = amount;
+    excessReason = String(entry?.excessReason ?? '').trim();
+    if (!EXCESS_REASONS.includes(excessReason)) {
+      return { error: '超過の理由タグを選択してください' };
+    }
   }
-  return { value: { major, minor, reflection, improvement, result } };
+
+  return {
+    value: { major, minor, isExcess, excessAmount, excessReason, itemName, reflection, improvement },
+  };
 }
 
 // 全月の反省を返す。

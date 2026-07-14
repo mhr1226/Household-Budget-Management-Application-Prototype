@@ -2,13 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { listMonths, aggregate } from '@/lib/aggregate';
-import { monthLabel } from '@/lib/format';
+import { aggregateExcess } from '@/lib/excess';
+import { monthLabel, yen } from '@/lib/format';
 import CsvImport from './CsvImport';
 import SummaryCards from './SummaryCards';
 import ExpensePieChart from './ExpensePieChart';
 import MinorBreakdownTable from './MinorBreakdownTable';
 import ReflectionEditor from './ReflectionEditor';
 import DetailTab from './DetailTab';
+import BudgetTab from './BudgetTab';
 import Placeholder from './Placeholder';
 
 const TABS = [
@@ -50,6 +52,11 @@ export default function BudgetApp() {
     () => aggregate(transactions, selectedMonth),
     [transactions, selectedMonth]
   );
+  // ダッシュボードに出す当月の超過支出（合計・件数）。
+  const monthExcess = useMemo(
+    () => aggregateExcess(reflections, selectedMonth ? [selectedMonth] : []),
+    [reflections, selectedMonth]
+  );
 
   return (
     <div className="app">
@@ -66,7 +73,7 @@ export default function BudgetApp() {
             onClick={() => setTab(t.key)}
           >
             {t.label}
-            {(t.key === 'budget' || t.key === 'compare') && <span className="badge">準備中</span>}
+            {t.key === 'compare' && <span className="badge">準備中</span>}
           </button>
         ))}
       </nav>
@@ -121,6 +128,16 @@ export default function BudgetApp() {
                   <MinorBreakdownTable summary={summary} />
                 </div>
               </div>
+              <div className="panel excess-summary">
+                <div className="excess-summary-main">
+                  <span className="label">今月の超過支出</span>
+                  <span className="value expense">{yen(monthExcess.total)}</span>
+                  <span className="sub">{monthExcess.entries.length} 件</span>
+                </div>
+                <p className="hint" style={{ margin: 0 }}>
+                  反省で「超過（無駄）」と記録した金額の合計です。内訳は「予算」タブで確認できます。
+                </p>
+              </div>
               <ReflectionEditor
                 month={selectedMonth}
                 entries={reflections[selectedMonth] || []}
@@ -135,9 +152,11 @@ export default function BudgetApp() {
         <DetailTab transactions={transactions} months={months} defaultMonth={selectedMonth} />
       )}
       {tab === 'budget' && (
-        <Placeholder
-          title="予算タブ（第2段階）"
-          desc="各分類に月次予算を設定し、実績と対比します。"
+        <BudgetTab
+          transactions={transactions}
+          reflections={reflections}
+          months={months}
+          defaultMonth={selectedMonth}
         />
       )}
       {tab === 'compare' && (

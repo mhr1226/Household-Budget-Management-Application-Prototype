@@ -48,11 +48,17 @@ body {
 
 /* ---- タブ ---- */
 .tabs {
+  /* 下にスクロールしてもタブが隠れないよう画面上部に固定する。 */
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
   display: flex;
   gap: 4px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 24px;
   flex-wrap: wrap;
+  padding-top: 8px;
 }
 
 .tab {
@@ -468,9 +474,9 @@ textarea {
   color: #1f9d55;
 }
 
-.reflection-label.result {
-  background: #eef1f6;
-  color: #48566b;
+.reflection-label.item {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 .reflection-block p {
@@ -482,6 +488,66 @@ textarea {
 
 .reflection-toggle {
   margin-top: 12px;
+}
+
+/* 超過支出（無駄遣い）の入力ブロック。警告色の枠で他フィールドと区別する。 */
+.reflection-excess-field {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--warn-border);
+  background: var(--warn-bg);
+  border-radius: 10px;
+}
+
+.reflection-excess-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.reflection-excess-check input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.reflection-excess-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reflection-excess-detail .field {
+  flex: 1 1 160px;
+  min-width: 140px;
+}
+
+.reflection-excess-detail input[type='number'] {
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  width: 100%;
+}
+
+.reflection-excess-detail select {
+  width: 100%;
+  min-width: 0;
+}
+
+/* 保存済みリストの超過バッジ。支出色で目立たせる。 */
+.reflection-excess-tag {
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--expense);
+  padding: 2px 10px;
+  border-radius: 999px;
 }
 
 /* ---- 明細タブ ---- */
@@ -648,6 +714,89 @@ table.detail tr.excluded {
   text-align: center;
   color: var(--muted);
   padding: 40px 16px;
+}
+
+/* ---- 予算タブ（超過支出ビュー） ---- */
+/* 期間・粒度の切替（セグメンテッドコントロール） */
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.seg button {
+  appearance: none;
+  border: none;
+  background: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.seg button + button {
+  border-left: 1px solid var(--border);
+}
+
+.seg button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* 超過支出の合計（予算タブの見出し数値） */
+.excess-headline {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.excess-headline .label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.excess-headline .value {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.excess-headline .sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ダッシュボードの当月超過サマリ */
+.excess-summary-main {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.excess-summary-main .label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.excess-summary-main .value {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.excess-summary-main .sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* 基準支出がマイナスの行（入力ミスの可能性）。 */
+table.breakdown td.num.neg {
+  color: var(--expense);
+}
+
+table.breakdown td.num.neg .tag {
+  margin-left: 6px;
 }
 
 @media (max-width: 760px) {
