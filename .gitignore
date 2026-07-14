@@ -4,7 +4,8 @@
 npm-debug.log*
 .DS_Store
 CLAUDE.md
-
+excess-spending-feature.md
+budget-feature.md
 
 # 家計データは外部に出さない。サンプル以外の実データはコミットしない場合はここで無視する。
 # /data/transactions.json

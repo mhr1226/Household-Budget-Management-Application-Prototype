@@ -1,14 +1,69 @@
 {
   "2026-06": [
     {
-      "id": "7e2d029f-9527-432d-b245-b9c775e77db7",
+      "id": "a6fa1f62-39fb-4488-bbc6-ed252662610c",
       "major": "食費",
       "minor": "日常食費",
-      "reflection": "テスト",
-      "improvement": "テスト",
-      "result": "こうなったよー",
-      "createdAt": "2026-07-10T18:56:01.611Z",
-      "updatedAt": "2026-07-10T18:56:31.831Z"
+      "isExcess": true,
+      "excessAmount": 1000,
+      "excessReason": "衝動買い",
+      "itemName": "",
+      "reflection": "test",
+      "improvement": "test",
+      "createdAt": "2026-07-14T16:50:59.011Z",
+      "updatedAt": null
+    },
+    {
+      "id": "14aeda92-f6e1-4d55-9156-783e1931b840",
+      "major": "生活",
+      "minor": "住宅設備",
+      "isExcess": true,
+      "excessAmount": 4000,
+      "excessReason": "管理不足",
+      "itemName": "あああ",
+      "reflection": "てすと",
+      "improvement": "てすと",
+      "createdAt": "2026-07-14T18:02:02.761Z",
+      "updatedAt": null
+    },
+    {
+      "id": "0f2d7764-086e-4efc-a1d6-0e7d0279c4f2",
+      "major": "食費",
+      "minor": "ストック食費",
+      "isExcess": true,
+      "excessAmount": 3000,
+      "excessReason": "選択ミス",
+      "itemName": "111",
+      "reflection": "222",
+      "improvement": "333",
+      "createdAt": "2026-07-14T18:02:37.264Z",
+      "updatedAt": null
+    },
+    {
+      "id": "94535218-9448-4337-bcd8-465962abbf5b",
+      "major": "娯楽",
+      "minor": "突発サブスク",
+      "isExcess": true,
+      "excessAmount": 2500,
+      "excessReason": "突発",
+      "itemName": "333",
+      "reflection": "444",
+      "improvement": "555",
+      "createdAt": "2026-07-14T18:03:02.323Z",
+      "updatedAt": null
+    },
+    {
+      "id": "05c508f4-2d9d-4e48-9aa6-b3f855eb6e20",
+      "major": "美容健康",
+      "minor": "医療費",
+      "isExcess": true,
+      "excessAmount": 5000,
+      "excessReason": "管理不足",
+      "itemName": "555",
+      "reflection": "666",
+      "improvement": "777",
+      "createdAt": "2026-07-14T18:03:27.908Z",
+      "updatedAt": null
     }
   ]
 }

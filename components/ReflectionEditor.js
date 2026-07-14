@@ -1,13 +1,23 @@
 'use client';
 
 import { useState } from 'react';
-import { monthLabel } from '@/lib/format';
-import { CATEGORY_TREE, REFLECTION_MAJORS } from '@/lib/mapping';
+import { monthLabel, yen } from '@/lib/format';
+import { CATEGORY_TREE, REFLECTION_MAJORS, EXCESS_REASONS } from '@/lib/mapping';
 
 // リストがこの件数を超えたら「もっと見る」で折りたたむ。
 const COLLAPSED_COUNT = 3;
 
-const EMPTY_FORM = { major: '', minor: '', reflection: '', improvement: '', result: '' };
+// excessAmount は number input の値なので文字列で保持し、送信時に API 側で数値化する。
+const EMPTY_FORM = {
+  major: '',
+  minor: '',
+  isExcess: false,
+  excessAmount: '',
+  excessReason: '',
+  itemName: '',
+  reflection: '',
+  improvement: '',
+};
 
 export default function ReflectionEditor({ month, entries, onChange }) {
   const [form, setForm] = useState(EMPTY_FORM);
@@ -34,6 +44,11 @@ export default function ReflectionEditor({ month, entries, onChange }) {
         const allowed = CATEGORY_TREE[value] || [];
         if (!allowed.includes(next.minor)) next.minor = '';
       }
+      // 超過チェックを外したら、金額と理由タグはクリアする。
+      if (key === 'isExcess' && !value) {
+        next.excessAmount = '';
+        next.excessReason = '';
+      }
       return next;
     });
   }
@@ -47,9 +62,13 @@ export default function ReflectionEditor({ month, entries, onChange }) {
     setForm({
       major: e.major || '',
       minor: e.minor || '',
+      isExcess: e.isExcess === true,
+      // number input へは文字列で渡す（0 は「未入力」として空欄にする）。
+      excessAmount: e.isExcess && e.excessAmount ? String(e.excessAmount) : '',
+      excessReason: e.isExcess ? e.excessReason || '' : '',
+      itemName: e.itemName || '',
       reflection: e.reflection || '',
       improvement: e.improvement || '',
-      result: e.result || '',
     });
     setEditingId(e.id);
     setStatus(null);
@@ -61,9 +80,24 @@ export default function ReflectionEditor({ month, entries, onChange }) {
       setStatus({ type: 'err', text: 'カテゴリ（大分類）を選択してください。' });
       return;
     }
-    if (!form.reflection.trim() && !form.improvement.trim() && !form.result.trim()) {
-      setStatus({ type: 'err', text: '反省点・改善点・結果のいずれかを入力してください。' });
+    if (!form.reflection.trim()) {
+      setStatus({ type: 'err', text: '反省点を入力してください。' });
       return;
+    }
+    if (!form.improvement.trim()) {
+      setStatus({ type: 'err', text: '改善点を入力してください。' });
+      return;
+    }
+    if (form.isExcess) {
+      const amount = Number(form.excessAmount);
+      if (!Number.isInteger(amount) || amount < 1) {
+        setStatus({ type: 'err', text: '超過額は1以上の整数で入力してください。' });
+        return;
+      }
+      if (!form.excessReason) {
+        setStatus({ type: 'err', text: '超過の理由タグを選択してください。' });
+        return;
+      }
     }
     setSaving(true);
     setStatus(null);
@@ -143,6 +177,58 @@ export default function ReflectionEditor({ month, entries, onChange }) {
           </label>
         </div>
 
+        {/* 超過支出（無駄遣い）の記録。チェック時のみ金額・理由タグを表示する。 */}
+        <div className="reflection-excess-field">
+          <label className="reflection-excess-check">
+            <input
+              type="checkbox"
+              checked={form.isExcess}
+              onChange={(e) => setField('isExcess', e.target.checked)}
+            />
+            超過支出の有無 ※セールなどによるストック（買い溜め）は含めない
+          </label>
+          {form.isExcess && (
+            <div className="reflection-excess-detail">
+              <label className="field">
+                超過額（円）
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={form.excessAmount}
+                  onChange={(e) => setField('excessAmount', e.target.value)}
+                  placeholder="4000"
+                />
+              </label>
+              <label className="field">
+                理由タグ
+                <select
+                  value={form.excessReason}
+                  onChange={(e) => setField('excessReason', e.target.value)}
+                >
+                  <option value="">選択してください</option>
+                  {EXCESS_REASONS.map((r) => (
+                    <option key={r} value={r}>
+                      {r}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+          )}
+        </div>
+
+        {/* 品名（任意）。超過支出の対象品など、具体的な品目を記録する。 */}
+        <label className="field">
+          品名
+          <input
+            type="text"
+            value={form.itemName}
+            onChange={(e) => setField('itemName', e.target.value)}
+            placeholder="例: ○○（任意）"
+          />
+        </label>
+
         <div className="reflection-fields">
           <label className="field grow">
             反省点
@@ -161,16 +247,6 @@ export default function ReflectionEditor({ month, entries, onChange }) {
             />
           </label>
         </div>
-
-        <label className="field">
-          結果
-          <input
-            type="text"
-            value={form.result}
-            onChange={(e) => setField('result', e.target.value)}
-            placeholder="結果：約4000円多めの支出 など"
-          />
-        </label>
 
         <div className="reflection-foot">
           <button className="btn" onClick={submit} disabled={saving || !month}>
@@ -201,6 +277,12 @@ export default function ReflectionEditor({ month, entries, onChange }) {
                 <div className="reflection-item-head">
                   <span className="reflection-cat">{e.major}</span>
                   {e.minor && <span className="reflection-sub">{e.minor}</span>}
+                  {e.isExcess && (
+                    <span className="reflection-excess-tag">
+                      超過 {yen(e.excessAmount)}
+                      {e.excessReason && ` · ${e.excessReason}`}
+                    </span>
+                  )}
                   {e.createdAt && <span className="reflection-date">{formatDate(e.createdAt)}</span>}
                   {e.updatedAt && <span className="reflection-date">（編集済）</span>}
                   <span className="reflection-actions">
@@ -212,6 +294,12 @@ export default function ReflectionEditor({ month, entries, onChange }) {
                     </button>
                   </span>
                 </div>
+                {e.itemName && (
+                  <div className="reflection-block">
+                    <span className="reflection-label item">品名</span>
+                    <p>{e.itemName}</p>
+                  </div>
+                )}
                 {e.reflection && (
                   <div className="reflection-block">
                     <span className="reflection-label reflect">反省点</span>
@@ -222,12 +310,6 @@ export default function ReflectionEditor({ month, entries, onChange }) {
                   <div className="reflection-block">
                     <span className="reflection-label improve">改善点</span>
                     <p>{e.improvement}</p>
-                  </div>
-                )}
-                {e.result && (
-                  <div className="reflection-block">
-                    <span className="reflection-label result">結果</span>
-                    <p>{e.result}</p>
                   </div>
                 )}
               </li>
