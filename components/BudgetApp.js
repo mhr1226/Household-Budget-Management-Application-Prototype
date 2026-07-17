@@ -97,7 +97,7 @@ export default function BudgetApp() {
                   ))}
                 </select>
               </label>
-              <CsvImport transactions={transactions} onImported={loadAll} />
+              <CsvImport transactions={transactions} month={selectedMonth} onImported={loadAll} />
             </div>
           </div>
 

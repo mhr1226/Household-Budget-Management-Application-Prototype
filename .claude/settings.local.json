@@ -11,7 +11,23 @@
       "Bash(pip install *)",
       "Bash(python -c ' *)",
       "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('scripts:', d.get\\('scripts'\\)\\)\")",
-      "Bash(python -c \"import json; d=json.load\\(open\\('data/transactions.json',encoding='utf-8'\\)\\); t=d if isinstance\\(d,list\\) else d.get\\('transactions',[]\\); print\\('tx count', len\\(t\\)\\); print\\('sample', t[0] if t else None\\)\")"
+      "Bash(python -c \"import json; d=json.load\\(open\\('data/transactions.json',encoding='utf-8'\\)\\); t=d if isinstance\\(d,list\\) else d.get\\('transactions',[]\\); print\\('tx count', len\\(t\\)\\); print\\('sample', t[0] if t else None\\)\")",
+      "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/test-merge.mjs\")",
+      "Bash(node -e ' *)",
+      "Bash(ls \"C:/Users/user/Downloads/\" 2>/dev/null | grep -i -E \"zaim|money|csv\")",
+      "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/dry-run-import.mjs\")",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri http://localhost:3000 -UseBasicParsing -TimeoutSec 5; \"HTTP $\\($r.StatusCode\\), length $\\($r.Content.Length\\)\"; if \\($r.Content -match 'dropzone'\\) { 'contains dropzone: yes' } else { 'contains dropzone: no' } } catch { \"request failed: $\\($_.Exception.Message\\)\" })",
+      "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/dry-run-mf-target.mjs\")",
+      "Bash(curl -s http://localhost:55502)",
+      "Bash(curl -s -w \" [%{http_code}]\" -X DELETE \"http://localhost:55502/api/transactions\")",
+      "Bash(curl -s -w \" [%{http_code}]\" -X DELETE \"http://localhost:55502/api/transactions?month=abc\")",
+      "Bash(curl -s -w \" [%{http_code}]\" -X DELETE \"http://localhost:55502/api/transactions?month=1999-01\")",
+      "Bash(iconv -f SHIFT_JIS -t UTF-8 \"Zaim.20260717231149.csv\")",
+      "Bash(python -c \"print\\(open\\('Zaim.20260717231149.csv', encoding='shift_jis'\\).read\\(\\)[:4000]\\)\")",
+      "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/analyze-unmapped.mjs\")",
+      "Bash(curl -s -m 5 -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
+      "PowerShell($rows = netstat -ano | findstr \"LISTENING\" | findstr \":3000\"; $rows; if \\($rows\\) { $ownPid = \\($rows -split '\\\\s+'\\)[-1]; $proc = Get-CimInstance Win32_Process -Filter \"ProcessId=$ownPid\"; $proc.Name; $proc.CommandLine })",
+      "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/dry-run-mapping-fix.mjs\")"
     ]
   }
 }
