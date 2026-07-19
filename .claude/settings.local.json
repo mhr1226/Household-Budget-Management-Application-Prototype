@@ -27,7 +27,10 @@
       "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/analyze-unmapped.mjs\")",
       "Bash(curl -s -m 5 -o /dev/null -w \"%{http_code}\" http://localhost:3000)",
       "PowerShell($rows = netstat -ano | findstr \"LISTENING\" | findstr \":3000\"; $rows; if \\($rows\\) { $ownPid = \\($rows -split '\\\\s+'\\)[-1]; $proc = Get-CimInstance Win32_Process -Filter \"ProcessId=$ownPid\"; $proc.Name; $proc.CommandLine })",
-      "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/dry-run-mapping-fix.mjs\")"
+      "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/dry-run-mapping-fix.mjs\")",
+      "Bash(node -e \"const d=require\\('./data/transactions.json'\\);console.log\\('tx count:',d.length\\)\")",
+      "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('./data/transactions.json','utf8'\\)\\);console.log\\('tx count:',d.length\\)\")",
+      "Bash(npm run *)"
     ]
   }
 }

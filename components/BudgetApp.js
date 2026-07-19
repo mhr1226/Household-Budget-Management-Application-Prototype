@@ -1,17 +1,24 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { listMonths, aggregate } from '@/lib/aggregate';
 import { aggregateExcess } from '@/lib/excess';
 import { monthLabel, yen } from '@/lib/format';
 import CsvImport from './CsvImport';
 import SummaryCards from './SummaryCards';
-import ExpensePieChart from './ExpensePieChart';
 import MinorBreakdownTable from './MinorBreakdownTable';
 import ReflectionEditor from './ReflectionEditor';
 import DetailTab from './DetailTab';
 import BudgetTab from './BudgetTab';
 import Placeholder from './Placeholder';
+
+// Recharts（依存の中で最も重いライブラリ）を初期バンドルから切り離し、
+// 円グラフ部分だけ後から読み込む。グラフはブラウザ描画専用なのでSSRも切る。
+const ExpensePieChart = dynamic(() => import('./ExpensePieChart'), {
+  ssr: false,
+  loading: () => <div className="empty">グラフを読み込み中…</div>,
+});
 
 const TABS = [
   { key: 'dashboard', label: 'ダッシュボード' },
@@ -20,13 +27,17 @@ const TABS = [
   { key: 'compare', label: '比較' },
 ];
 
-export default function BudgetApp() {
-  const [transactions, setTransactions] = useState([]);
-  const [reflections, setReflections] = useState({});
-  const [selectedMonth, setSelectedMonth] = useState('');
+// 初期データはサーバーコンポーネント（app/page.js）がファイルから直接読んで渡してくる。
+// マウント後のfetchを待たずに最初の描画から集計結果を出せる。
+export default function BudgetApp({ initialTransactions = [], initialReflections = {} }) {
+  const [transactions, setTransactions] = useState(initialTransactions);
+  const [reflections, setReflections] = useState(initialReflections);
+  const [selectedMonth, setSelectedMonth] = useState(
+    () => listMonths(initialTransactions)[0] || ''
+  );
   const [tab, setTab] = useState('dashboard');
-  const [loading, setLoading] = useState(true);
 
+  // CSV取込・月削除の後にサーバーの最新状態を取り直す。
   async function loadAll() {
     const [txRes, rfRes] = await Promise.all([
       fetch('/api/transactions').then((r) => r.json()),
@@ -40,12 +51,7 @@ export default function BudgetApp() {
       if (prev && months.includes(prev)) return prev;
       return months[0] || '';
     });
-    setLoading(false);
   }
-
-  useEffect(() => {
-    loadAll();
-  }, []);
 
   const months = useMemo(() => listMonths(transactions), [transactions]);
   const summary = useMemo(
@@ -101,9 +107,7 @@ export default function BudgetApp() {
             </div>
           </div>
 
-          {loading ? (
-            <div className="panel empty">読み込み中…</div>
-          ) : transactions.length === 0 ? (
+          {transactions.length === 0 ? (
             <div className="panel empty">
               まだデータがありません。上の「CSV取込」から Zaim / MoneyForward の6月分CSVを取り込んでください。
             </div>
