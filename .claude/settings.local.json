@@ -30,7 +30,8 @@
       "Bash(node \"C:/Users/user/AppData/Local/Temp/claude/C--PrivateFolders-programingFiles-Household-Budget-Management-Application-Prototype/0c1bac78-d629-4d4b-b0b4-cdb413a3c702/scratchpad/dry-run-mapping-fix.mjs\")",
       "Bash(node -e \"const d=require\\('./data/transactions.json'\\);console.log\\('tx count:',d.length\\)\")",
       "Bash(node -e \"const d=JSON.parse\\(require\\('fs'\\).readFileSync\\('./data/transactions.json','utf8'\\)\\);console.log\\('tx count:',d.length\\)\")",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)"
     ]
   }
 }
