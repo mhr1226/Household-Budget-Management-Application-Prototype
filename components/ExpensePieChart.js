@@ -6,14 +6,15 @@ import { yen } from '@/lib/format';
 
 const RADIAN = Math.PI / 180;
 
-// スライスの内側（ドーナツの帯の中央）に構成比を描く。
-// 外側ラベルは列幅が狭いと見切れたり hover 時に隠れたりするため、内側に置く。
+// 構成比のラベル。大きめのスライスは内側（ドーナツの帯の中央）に、
+// 帯に収まらない小さなスライスは外側のすぐ脇に描き、すべてのスライスで数字を出す。
 // 分類名は凡例（Legend）、金額は hover 時のツールチップで確認できる。
-function renderInnerLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent }) {
-  if (percent < 0.05) return null; // 小さすぎるスライスは省略（内訳表で確認できる）
-  const r = innerRadius + (outerRadius - innerRadius) * 0.5;
+function renderPercentLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent }) {
+  const inside = percent >= 0.05; // 5%未満は帯の中に収まらないため外側に出す
+  const r = inside ? innerRadius + (outerRadius - innerRadius) * 0.5 : outerRadius + 12;
   const x = cx + r * Math.cos(-midAngle * RADIAN);
   const y = cy + r * Math.sin(-midAngle * RADIAN);
+  const pct = percent * 100;
   return (
     <text
       x={x}
@@ -21,22 +22,23 @@ function renderInnerLabel({ cx, cy, midAngle, innerRadius, outerRadius, percent 
       fill="#1f2933"
       fontSize={12}
       fontWeight={600}
-      textAnchor="middle"
+      textAnchor={inside ? 'middle' : x > cx ? 'start' : 'end'}
       dominantBaseline="central"
     >
-      {`${Math.round(percent * 100)}%`}
+      {pct >= 1 ? `${Math.round(pct)}%` : `${pct.toFixed(1)}%`}
     </text>
   );
 }
 
-export default function ExpensePieChart({ data, total }) {
+// onSelectMajor: スライス（大分類）クリック時に分類名を渡すコールバック。明細タブへの遷移に使う。
+export default function ExpensePieChart({ data, total, onSelectMajor }) {
   if (!data || data.length === 0) {
     return <div className="empty">支出データがありません。</div>;
   }
 
   return (
-    <div style={{ width: '100%', height: 320 }}>
-      <ResponsiveContainer>
+    <div style={{ width: '100%', height: 400, padding: '8px 4px' }}>
+      <ResponsiveContainer height={360}>
         <PieChart>
           <Pie
             data={data}
@@ -45,11 +47,17 @@ export default function ExpensePieChart({ data, total }) {
             cx="50%"
             cy="50%"
             // 半径は割合指定にして、コンテナ幅の測定誤差があってもドーナツが枠内に収まるようにする。
-            innerRadius="45%"
-            outerRadius="72%"
+            // 外側ラベルの分だけ少し内側に収める。
+            innerRadius="42%"
+            outerRadius="68%"
             paddingAngle={1}
-            label={renderInnerLabel}
+            label={renderPercentLabel}
             labelLine={false}
+            isAnimationActive={false}
+            onClick={(d) => {
+              const name = d?.name ?? d?.payload?.name;
+              if (name) onSelectMajor?.(name);
+            }}
           >
             {data.map((d) => (
               <Cell key={d.name} fill={MAJOR_COLORS[d.name] || '#999'} />
@@ -59,7 +67,7 @@ export default function ExpensePieChart({ data, total }) {
           <Legend />
         </PieChart>
       </ResponsiveContainer>
-      <div style={{ textAlign: 'center', color: 'var(--muted)', fontSize: 13, marginTop: 4 }}>
+      <div style={{ textAlign: 'center', color: 'var(--muted)', fontSize: 15, padding: '10px 0 4px' }}>
         支出合計 {yen(total)}
       </div>
     </div>

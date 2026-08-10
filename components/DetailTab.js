@@ -1,51 +1,62 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import { monthOf } from '@/lib/aggregate';
-import { monthLabel, yen } from '@/lib/format';
+import { useEffect, useMemo, useState } from 'react';
+import { yen } from '@/lib/format';
 import { MAJOR_COLORS } from '@/lib/mapping';
 
 const TYPE_LABEL = { expense: '支出', income: '収入', investment: '投資' };
 const SOURCE_LABEL = { zaim: 'Zaim', moneyforward: 'MF' };
 
-export default function DetailTab({ transactions, months, defaultMonth }) {
-  const [month, setMonth] = useState(defaultMonth || '');
+// 期間（月次/年次/全期間）の選択状態は BudgetApp が持ち、ダッシュボードと共有する。
+// period は "2026-06"（月）/ "2026"（年）/ ''（全期間）、periodSelector は共通の選択UI。
+// 大分類フィルタ（major）も BudgetApp が持ち、円グラフのクリックから飛んで来られるようにする。
+export default function DetailTab({ transactions, period, periodSelector, major, onMajorChange }) {
   const [type, setType] = useState('all'); // all | expense | income | investment
-  const [major, setMajor] = useState('all');
   const [minor, setMinor] = useState('all');
   const [incl, setIncl] = useState('in'); // all | in（集計対象のみ）| out（対象外のみ）
   const [q, setQ] = useState('');
+  // 日付範囲での絞り込み（期間セレクタよりさらに細かく絞りたいとき用）。空なら制限なし。
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
   const [sortKey, setSortKey] = useState('date'); // date | amount
   const [sortDir, setSortDir] = useState('asc');
 
-  // 月で絞ったベース（大分類/小分類の選択肢はここから作る）
-  const inMonth = useMemo(
-    () => transactions.filter((t) => (!month ? true : monthOf(t.date) === month)),
-    [transactions, month]
+  // 大分類が変わったら（セレクタ操作でも円グラフ経由でも）小分類の選択をリセットする。
+  useEffect(() => {
+    setMinor('all');
+  }, [major]);
+
+  // 期間で絞ったベース（大分類/小分類の選択肢はここから作る）。日付の前方一致で月・年どちらにも対応。
+  const inPeriod = useMemo(
+    () => transactions.filter((t) => (!period ? true : (t.date || '').startsWith(period))),
+    [transactions, period]
   );
 
   const majorOptions = useMemo(() => {
-    const s = new Set(inMonth.filter((t) => t.type === 'expense').map((t) => t.major));
+    const s = new Set(inPeriod.filter((t) => t.type === 'expense').map((t) => t.major));
     return Array.from(s);
-  }, [inMonth]);
+  }, [inPeriod]);
 
   const minorOptions = useMemo(() => {
     const s = new Set(
-      inMonth
+      inPeriod
         .filter((t) => t.type === 'expense' && (major === 'all' || t.major === major))
         .map((t) => t.minor)
     );
     return Array.from(s);
-  }, [inMonth, major]);
+  }, [inPeriod, major]);
 
   const rows = useMemo(() => {
     const kw = q.trim();
-    let list = inMonth.filter((t) => {
+    let list = inPeriod.filter((t) => {
       if (type !== 'all' && t.type !== type) return false;
       if (incl === 'in' && !t.included) return false;
       if (incl === 'out' && t.included) return false;
       if (major !== 'all' && t.major !== major) return false;
       if (minor !== 'all' && t.minor !== minor) return false;
+      // 日付は "YYYY-MM-DD" の文字列比較でそのまま大小判定できる。
+      if (dateFrom && t.date < dateFrom) return false;
+      if (dateTo && t.date > dateTo) return false;
       if (kw) {
         const hay = `${t.store} ${t.item} ${t.originalCategory} ${t.memo} ${t.major} ${t.minor}`;
         if (!hay.includes(kw)) return false;
@@ -59,7 +70,7 @@ export default function DetailTab({ transactions, months, defaultMonth }) {
       return sortDir === 'asc' ? c : -c;
     });
     return list;
-  }, [inMonth, type, incl, major, minor, q, sortKey, sortDir]);
+  }, [inPeriod, type, incl, major, minor, q, dateFrom, dateTo, sortKey, sortDir]);
 
   // フィルタ後の合計（種別ごと）
   const totals = useMemo(() => {
@@ -75,12 +86,14 @@ export default function DetailTab({ transactions, months, defaultMonth }) {
       setSortDir(key === 'amount' ? 'desc' : 'asc');
     }
   }
-  const arrow = (key) => (sortKey === key ? (sortDir === 'asc' ? ' ▲' : ' ▼') : '');
-
-  function resetMinorOnMajor(v) {
-    setMajor(v);
-    setMinor('all');
-  }
+  // 並び替え中の列は ▲/▼、それ以外の並び替え可能な列は薄い ⇅ を常に見せて、
+  // クリックで並び替えできることをわかりやすくする。
+  const arrow = (key) =>
+    sortKey === key ? (
+      <span className="sort-arrow active">{sortDir === 'asc' ? '▲' : '▼'}</span>
+    ) : (
+      <span className="sort-arrow">⇅</span>
+    );
 
   return (
     <div>
@@ -91,17 +104,7 @@ export default function DetailTab({ transactions, months, defaultMonth }) {
           クレジット一括払い等で集計から除外している行だけを表示します（不要データの点検用）。
         </p>
         <div className="filters">
-          <label className="field">
-            対象月
-            <select value={month} onChange={(e) => setMonth(e.target.value)}>
-              <option value="">全期間</option>
-              {months.map((m) => (
-                <option key={m} value={m}>
-                  {monthLabel(m)}
-                </option>
-              ))}
-            </select>
-          </label>
+          {periodSelector}
           <label className="field">
             種別
             <select value={type} onChange={(e) => setType(e.target.value)}>
@@ -113,7 +116,7 @@ export default function DetailTab({ transactions, months, defaultMonth }) {
           </label>
           <label className="field">
             大分類
-            <select value={major} onChange={(e) => resetMinorOnMajor(e.target.value)}>
+            <select value={major} onChange={(e) => onMajorChange(e.target.value)}>
               <option value="all">すべて</option>
               {majorOptions.map((m) => (
                 <option key={m} value={m}>
@@ -150,6 +153,49 @@ export default function DetailTab({ transactions, months, defaultMonth }) {
               placeholder="例: Amazon / サブスク / ハロカ"
             />
           </label>
+          <label className="field">
+            日付範囲（さらに絞り込む）
+            <div className="date-range">
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+              />
+              <span>〜</span>
+              <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} />
+              {(dateFrom || dateTo) && (
+                <button
+                  className="btn ghost"
+                  onClick={() => {
+                    setDateFrom('');
+                    setDateTo('');
+                  }}
+                >
+                  クリア
+                </button>
+              )}
+            </div>
+          </label>
+          <label className="field">
+            並び替え
+            <div className="seg">
+              <button
+                className={sortKey === 'date' ? 'active' : ''}
+                onClick={() => setSortKey('date')}
+              >
+                日付
+              </button>
+              <button
+                className={sortKey === 'amount' ? 'active' : ''}
+                onClick={() => setSortKey('amount')}
+              >
+                金額
+              </button>
+              <button onClick={() => setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))}>
+                {sortDir === 'asc' ? '昇順 ▲' : '降順 ▼'}
+              </button>
+            </div>
+          </label>
         </div>
 
         <div className="detail-totals">
@@ -167,7 +213,7 @@ export default function DetailTab({ transactions, months, defaultMonth }) {
           <table className="detail">
             <thead>
               <tr>
-                <th className="sortable" onClick={() => toggleSort('date')}>
+                <th className="sortable" title="クリックで並び替え" onClick={() => toggleSort('date')}>
                   日付{arrow('date')}
                 </th>
                 <th>元</th>
@@ -175,7 +221,11 @@ export default function DetailTab({ transactions, months, defaultMonth }) {
                 <th>分類</th>
                 <th>店名</th>
                 <th>内容</th>
-                <th className="num sortable" onClick={() => toggleSort('amount')}>
+                <th
+                  className="num sortable"
+                  title="クリックで並び替え"
+                  onClick={() => toggleSort('amount')}
+                >
                   金額{arrow('amount')}
                 </th>
                 <th>集計</th>

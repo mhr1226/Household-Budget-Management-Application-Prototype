@@ -611,11 +611,11 @@ textarea {
 .detail-totals {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
-  margin-top: 14px;
-  padding-top: 12px;
+  gap: 20px;
+  margin-top: 18px;
+  padding: 14px 6px 6px;
   border-top: 1px solid var(--border);
-  font-size: 13px;
+  font-size: 15px;
   color: var(--muted);
 }
 
@@ -661,6 +661,39 @@ table.detail thead th {
 table.detail th.sortable {
   cursor: pointer;
   user-select: none;
+}
+
+table.detail th.sortable:hover {
+  color: var(--accent);
+}
+
+/* 並び替え可能な列の目印。非アクティブ時は薄い ⇅ を常に表示する。 */
+.sort-arrow {
+  margin-left: 4px;
+  color: var(--muted);
+  opacity: 0.5;
+  font-size: 11px;
+}
+
+.sort-arrow.active {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* 円グラフのスライスはクリックで明細タブに飛べる。 */
+.recharts-pie-sector path {
+  cursor: pointer;
+}
+
+/* 明細フィルタの日付範囲（開始〜終了）。 */
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.date-range span {
+  color: var(--muted);
 }
 
 table.detail td.num,
@@ -754,7 +787,38 @@ table.detail tr.excluded {
   padding: 40px 16px;
 }
 
-/* ---- 予算タブ（超過支出ビュー） ---- */
+/* ---- 比較タブ ---- */
+/* 比較元 → 比較先 の矢印。セレクタと高さを揃える。 */
+.compare-arrow {
+  align-self: flex-end;
+  padding-bottom: 8px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+/* 差額・増減率の色分け。good = 改善（支出減・収入増）、bad = 悪化。 */
+.delta-good {
+  color: var(--income);
+}
+
+.delta-bad {
+  color: var(--expense);
+}
+
+.card .delta {
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* 比較タブの内訳サブタブ（分類別 / 支出・収入・投資）。下の表と区切る。 */
+.subtab-bar {
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ---- 分析タブ（超過支出ビュー） ---- */
 /* 期間・粒度の切替（セグメンテッドコントロール） */
 .seg {
   display: inline-flex;

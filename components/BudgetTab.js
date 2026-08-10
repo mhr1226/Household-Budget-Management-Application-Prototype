@@ -5,7 +5,7 @@ import { monthLabel, yen, percent } from '@/lib/format';
 import { MAJOR_COLORS } from '@/lib/mapping';
 import { aggregateExcess, buildExcessComparison, listYears, monthsOfYear } from '@/lib/excess';
 
-// 予算タブは「超過支出のビュー専用」。編集はダッシュボードの反省エディタでのみ行い、
+// 分析タブは「超過支出のビュー専用」。編集はダッシュボードの反省エディタでのみ行い、
 // ここは読み取り専用で月次／年次に集計して見せる。
 export default function BudgetTab({ transactions, reflections, months, defaultMonth }) {
   const [mode, setMode] = useState('month'); // 'month' | 'year'
@@ -17,6 +17,19 @@ export default function BudgetTab({ transactions, reflections, months, defaultMo
   // セレクタが未選択（初期状態）でも先頭を既定にする。
   const activeMonth = month || months[0] || '';
   const activeYear = year || years[0] || '';
+
+  // 月次選択は「年」と「月」の2段階に分ける（古い月まで1つのリストでスクロールさせない）。
+  const monthYear = activeMonth.slice(0, 4);
+  const monthsInYear = useMemo(
+    () => months.filter((m) => m.startsWith(monthYear)),
+    [months, monthYear]
+  );
+  // 年を切り替えたら、同じ「月」がその年にあればそれを、なければその年の最新月を選ぶ。
+  function changeMonthYear(y) {
+    const candidates = months.filter((m) => m.startsWith(y));
+    const same = `${y}-${activeMonth.slice(5)}`;
+    setMonth(candidates.includes(same) ? same : candidates[0] || '');
+  }
 
   // 集計対象の月配列（月次は1ヶ月、年次はその年の12ヶ月）。
   const activeMonths = useMemo(() => {
@@ -76,21 +89,38 @@ export default function BudgetTab({ transactions, reflections, months, defaultMo
             </div>
           </label>
           {mode === 'month' ? (
-            <label className="field">
-              対象月
-              <select
-                value={activeMonth}
-                onChange={(e) => setMonth(e.target.value)}
-                disabled={months.length === 0}
-              >
-                {months.length === 0 && <option value="">データなし</option>}
-                {months.map((m) => (
-                  <option key={m} value={m}>
-                    {monthLabel(m)}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <>
+              <label className="field">
+                対象年
+                <select
+                  value={monthYear}
+                  onChange={(e) => changeMonthYear(e.target.value)}
+                  disabled={years.length === 0}
+                >
+                  {years.length === 0 && <option value="">データなし</option>}
+                  {years.map((y) => (
+                    <option key={y} value={y}>
+                      {y}年
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label className="field">
+                対象月
+                <select
+                  value={activeMonth}
+                  onChange={(e) => setMonth(e.target.value)}
+                  disabled={monthsInYear.length === 0}
+                >
+                  {monthsInYear.length === 0 && <option value="">データなし</option>}
+                  {monthsInYear.map((m) => (
+                    <option key={m} value={m}>
+                      {Number(m.slice(5))}月
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </>
           ) : (
             <label className="field">
               対象年
