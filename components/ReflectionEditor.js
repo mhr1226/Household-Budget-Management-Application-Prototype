@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { monthLabel, yen } from '@/lib/format';
 import { CATEGORY_TREE, REFLECTION_MAJORS, EXCESS_REASONS } from '@/lib/mapping';
+import TruncatedText from './TruncatedText';
 
 // リストがこの件数を超えたら「もっと見る」で折りたたむ。
 const COLLAPSED_COUNT = 3;
@@ -15,16 +16,58 @@ const EMPTY_FORM = {
   excessAmount: '',
   excessReason: '',
   itemName: '',
+  linkedItems: [], // 反省の対象として選んだ明細のスナップショット（複数可）
   reflection: '',
   improvement: '',
 };
 
-export default function ReflectionEditor({ month, entries, onChange }) {
+// 明細の表示名。内容が空の明細（MFの一部など）は店名で代用する。
+const itemLabel = (t) => t.item || t.store || '（名称なし）';
+
+// 直下の割引行として自動選択しない内容。ハローズの「税金・値引き」は毎会計で出る
+// 税額の打ち消し行で、商品の値引きではない。
+const NON_DISCOUNT_ITEMS = ['税金・値引き'];
+
+const snapshotOf = (t) => ({
+  id: t.id,
+  date: t.date,
+  store: t.store || '',
+  item: t.item || '',
+  amount: t.amount,
+});
+
+// 商品の直下に続く割引行（割引・値引き・ポイント・ギフト券など）を取り出す。
+// 「同日・同じ店・マイナス金額」の行が連続している間だけを対象にする。
+// list は取込順のまま（＝レシートの並び順）であること。
+function discountsBelow(list, t) {
+  if (!(t.amount > 0)) return [];
+  const out = [];
+  const start = list.findIndex((x) => x.id === t.id);
+  if (start < 0) return out;
+  for (let i = start + 1; i < list.length; i++) {
+    const x = list[i];
+    if (x.date !== t.date || x.store !== t.store || !(x.amount < 0)) break;
+    if (NON_DISCOUNT_ITEMS.some((w) => (x.item || '').includes(w))) break;
+    out.push(x);
+  }
+  return out;
+}
+
+// 選択中の明細の合計を超過額欄（文字列）へ入れる形にする。返金などで0以下になる場合は空欄に戻す。
+function linkedTotal(items) {
+  const total = Math.round(items.reduce((sum, x) => sum + (Number(x.amount) || 0), 0));
+  return total > 0 ? String(total) : '';
+}
+
+export default function ReflectionEditor({ month, entries, transactions, onChange }) {
   const [form, setForm] = useState(EMPTY_FORM);
   const [editingId, setEditingId] = useState(null); // null=新規追加, それ以外=編集中のエントリid
   const [status, setStatus] = useState(null);
   const [saving, setSaving] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  // 明細ピッカーの絞り込み・並び替え。
+  const [pickerQuery, setPickerQuery] = useState('');
+  const [pickerSort, setPickerSort] = useState('date'); // date（日付順）| amount（金額の大きい順）
 
   // 万一データが配列でない場合でも UI を壊さない（不正データの防御）。
   const list = Array.isArray(entries) ? entries : [];
@@ -35,6 +78,57 @@ export default function ReflectionEditor({ month, entries, onChange }) {
 
   // 選択中の大分類に対応する小分類の候補。
   const minorOptions = CATEGORY_TREE[form.major] || [];
+
+  // 明細ピッカーの候補。選択中の大分類・小分類で自動的に絞り込む（未選択ならその月の全支出）。
+  const candidates = useMemo(() => {
+    const kw = pickerQuery.trim();
+    const list = (Array.isArray(transactions) ? transactions : []).filter((t) => {
+      if (form.major && t.major !== form.major) return false;
+      if (form.minor && t.minor !== form.minor) return false;
+      if (kw && !`${t.store} ${t.item} ${t.memo}`.includes(kw)) return false;
+      return true;
+    });
+    return list.sort((a, b) =>
+      pickerSort === 'amount'
+        ? b.amount - a.amount
+        : a.date < b.date
+          ? -1
+          : a.date > b.date
+            ? 1
+            : 0
+    );
+  }, [transactions, form.major, form.minor, pickerQuery, pickerSort]);
+
+  const selectedIds = new Set(form.linkedItems.map((x) => x.id));
+  const selectedSum = form.linkedItems.reduce((sum, x) => sum + (Number(x.amount) || 0), 0);
+
+  // 明細の選択／解除。超過チェックが入っていれば、選択中の合計を超過額へ反映し直す
+  // （手入力で直した金額は、次に選択を変えるまで保持される）。
+  // 商品を選ぶと直下の割引行も一緒に選び、商品を外すと一緒に外す。
+  // 割引行だけを個別に外す・選ぶこともできる（その場合は1件だけ切り替わる）。
+  function toggleItem(t) {
+    const discounts = discountsBelow(Array.isArray(transactions) ? transactions : [], t);
+    setForm((f) => {
+      const exists = f.linkedItems.some((x) => x.id === t.id);
+      const group = new Set([t.id, ...discounts.map((x) => x.id)]);
+      const linkedItems = exists
+        ? f.linkedItems.filter((x) => !group.has(x.id))
+        : [
+            ...f.linkedItems,
+            ...[t, ...discounts]
+              .filter((x) => !f.linkedItems.some((y) => y.id === x.id))
+              .map(snapshotOf),
+          ];
+      const next = { ...f, linkedItems };
+      // 分類が未選択のまま明細を選んだら、その明細の分類を引き継ぐ。
+      if (!exists && !f.major && REFLECTION_MAJORS.includes(t.major)) {
+        next.major = t.major;
+        next.minor = (CATEGORY_TREE[t.major] || []).includes(t.minor) ? t.minor : '';
+      }
+      if (next.isExcess) next.excessAmount = linkedTotal(linkedItems);
+      return next;
+    });
+  }
 
   function setField(key, value) {
     setForm((f) => {
@@ -49,6 +143,10 @@ export default function ReflectionEditor({ month, entries, onChange }) {
         next.excessAmount = '';
         next.excessReason = '';
       }
+      // 超過チェックを入れたとき、明細を選択済みならその合計を超過額の初期値にする。
+      if (key === 'isExcess' && value && next.linkedItems.length > 0) {
+        next.excessAmount = linkedTotal(next.linkedItems);
+      }
       return next;
     });
   }
@@ -56,6 +154,7 @@ export default function ReflectionEditor({ month, entries, onChange }) {
   function resetForm() {
     setForm(EMPTY_FORM);
     setEditingId(null);
+    setPickerQuery('');
   }
 
   function startEdit(e) {
@@ -67,6 +166,7 @@ export default function ReflectionEditor({ month, entries, onChange }) {
       excessAmount: e.isExcess && e.excessAmount ? String(e.excessAmount) : '',
       excessReason: e.isExcess ? e.excessReason || '' : '',
       itemName: e.itemName || '',
+      linkedItems: Array.isArray(e.linkedItems) ? e.linkedItems : [],
       reflection: e.reflection || '',
       improvement: e.improvement || '',
     });
@@ -177,6 +277,80 @@ export default function ReflectionEditor({ month, entries, onChange }) {
           </label>
         </div>
 
+        {/* 対象の明細（任意・複数可）。似た明細をまとめて1件の反省にできる。 */}
+        <div className="reflection-picker">
+          <div className="reflection-picker-head">
+            <span className="reflection-picker-title">対象の明細（任意・複数選択可）</span>
+            <input
+              type="text"
+              value={pickerQuery}
+              onChange={(e) => setPickerQuery(e.target.value)}
+              placeholder="店名・内容で絞り込み"
+            />
+            <div className="seg">
+              <button
+                type="button"
+                className={pickerSort === 'date' ? 'active' : ''}
+                onClick={() => setPickerSort('date')}
+              >
+                日付順
+              </button>
+              <button
+                type="button"
+                className={pickerSort === 'amount' ? 'active' : ''}
+                onClick={() => setPickerSort('amount')}
+              >
+                金額順
+              </button>
+            </div>
+          </div>
+
+          {form.linkedItems.length > 0 && (
+            <div className="reflection-picked">
+              {form.linkedItems.map((x) => (
+                <span key={x.id} className="reflection-chip">
+                  <TruncatedText text={itemLabel(x)} />
+                  <span className="reflection-chip-amount">{yen(x.amount)}</span>
+                  <button type="button" onClick={() => toggleItem(x)} title="選択を外す">
+                    ×
+                  </button>
+                </span>
+              ))}
+              <span className="reflection-picked-total">
+                {form.linkedItems.length} 件 合計 {yen(selectedSum)}
+              </span>
+            </div>
+          )}
+
+          <div className="reflection-picker-list">
+            {candidates.length === 0 ? (
+              <div className="reflection-picker-empty">該当する明細がありません。</div>
+            ) : (
+              candidates.map((t) => (
+                <label
+                  key={t.id}
+                  className={`reflection-picker-row ${selectedIds.has(t.id) ? 'selected' : ''}`}
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(t.id)}
+                    onChange={() => toggleItem(t)}
+                  />
+                  <span className="reflection-picker-date">{t.date.slice(5)}</span>
+                  <span className="reflection-picker-name">
+                    <TruncatedText text={itemLabel(t)} />
+                    {t.item && t.store && <span className="reflection-picker-store">{t.store}</span>}
+                  </span>
+                  <span className="reflection-picker-cat">{t.minor}</span>
+                  <span className={`reflection-picker-amount ${t.amount < 0 ? 'neg' : ''}`}>
+                    {yen(t.amount)}
+                  </span>
+                </label>
+              ))
+            )}
+          </div>
+        </div>
+
         {/* 超過支出（無駄遣い）の記録。チェック時のみ金額・理由タグを表示する。 */}
         <div className="reflection-excess-field">
           <label className="reflection-excess-check">
@@ -190,7 +364,7 @@ export default function ReflectionEditor({ month, entries, onChange }) {
           {form.isExcess && (
             <div className="reflection-excess-detail">
               <label className="field">
-                超過額（円）
+                超過額（円）{form.linkedItems.length > 0 && ' ※選択した明細の合計を自動入力・修正可'}
                 <input
                   type="number"
                   min="1"
@@ -218,14 +392,14 @@ export default function ReflectionEditor({ month, entries, onChange }) {
           )}
         </div>
 
-        {/* 品名（任意）。超過支出の対象品など、具体的な品目を記録する。 */}
+        {/* 品名（任意）。明細に無い項目や、複数明細をまとめた呼び名などを自由に書ける。 */}
         <label className="field">
           品名
           <input
             type="text"
             value={form.itemName}
             onChange={(e) => setField('itemName', e.target.value)}
-            placeholder="例: ○○（任意）"
+            placeholder="例: ○○（任意・明細以外の項目や補足もここに書けます）"
           />
         </label>
 
@@ -298,6 +472,26 @@ export default function ReflectionEditor({ month, entries, onChange }) {
                   <div className="reflection-block">
                     <span className="reflection-label item">品名</span>
                     <p>{e.itemName}</p>
+                  </div>
+                )}
+                {e.linkedItems?.length > 0 && (
+                  <div className="reflection-block">
+                    <span className="reflection-label item">明細</span>
+                    <ul className="reflection-linked">
+                      {e.linkedItems.map((x) => (
+                        <li key={x.id}>
+                          <span className="reflection-picker-date">{x.date.slice(5)}</span>
+                          <TruncatedText text={itemLabel(x)} />
+                          <span className="reflection-chip-amount">{yen(x.amount)}</span>
+                        </li>
+                      ))}
+                      {e.linkedItems.length > 1 && (
+                        <li className="reflection-linked-total">
+                          合計{' '}
+                          {yen(e.linkedItems.reduce((sum, x) => sum + (Number(x.amount) || 0), 0))}
+                        </li>
+                      )}
+                    </ul>
                   </div>
                 )}
                 {e.reflection && (

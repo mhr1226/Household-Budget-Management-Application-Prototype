@@ -104,6 +104,17 @@ export default function BudgetApp({ initialTransactions = [], initialReflections
     [reflections, periodMonths]
   );
 
+  // 反省エディタで「対象の明細」として選べる、選択月の集計対象の支出。
+  const monthExpenses = useMemo(
+    () =>
+      selectedMonth
+        ? transactions.filter(
+            (t) => t.included && t.type === 'expense' && (t.date || '').startsWith(selectedMonth)
+          )
+        : [],
+    [transactions, selectedMonth]
+  );
+
   // 期間セレクタ（月次/年次/全期間）。ダッシュボードと明細タブで同じ状態を共有する。
   const periodSelector = (
     <>
@@ -260,7 +271,10 @@ export default function BudgetApp({ initialTransactions = [], initialReflections
               </div>
               {periodMode === 'month' ? (
                 <ReflectionEditor
+                  // 月を切り替えたら入力途中のフォーム（選択中の明細など）は持ち越さない。
+                  key={selectedMonth}
                   month={selectedMonth}
+                  transactions={monthExpenses}
                   entries={reflections[selectedMonth] || []}
                   onChange={(updated) => setReflections(updated)}
                 />

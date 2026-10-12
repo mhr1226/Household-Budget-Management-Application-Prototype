@@ -9,6 +9,7 @@
       "excessAmount": 3000,
       "excessReason": "衝動買い",
       "itemName": "ホロライブ課金",
+      "linkedItems": [],
       "reflection": "友人の紹介で無料だからと始めたものの、時間限定で新規者のみの石キャンペーン＋星5確定ガチャがあったことによって課金。\n確定なので安心感は高いものの、始めてなかったら発生していなかった支出。\nゲーム自体へのコミットも浅かった。",
       "improvement": "ソシャゲーは無料の導線で課金を促す傾向がある為、キャラゲーに関しては自身の気質も考慮して最初からインストールしないことが重要。\n禁止制約は自制心を要する為、買い物でも用いている【一週間経ってもやりたいと思うならOK】という条件付きでの遊びは許容内なのかもしれない。",
       "createdAt": "2026-08-10T13:17:11.633Z",
@@ -22,10 +23,103 @@
       "excessAmount": 4063,
       "excessReason": "その他",
       "itemName": "才女のお世話：小説",
+      "linkedItems": [
+        {
+          "id": "zaim|2026-07-13|娯楽/その他娯楽|644|Amazon.co.jp|【電子版限定特典付き】才女のお世話2 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）|#1",
+          "date": "2026-07-13",
+          "store": "Amazon.co.jp",
+          "item": "【電子版限定特典付き】才女のお世話2 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）",
+          "amount": 644
+        },
+        {
+          "id": "zaim|2026-07-13|娯楽/その他娯楽|663|Amazon.co.jp|【電子版限定特典付き】才女のお世話3 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）|#1",
+          "date": "2026-07-13",
+          "store": "Amazon.co.jp",
+          "item": "【電子版限定特典付き】才女のお世話3 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）",
+          "amount": 663
+        },
+        {
+          "id": "zaim|2026-07-13|娯楽/その他娯楽|-6|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-13",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -6
+        },
+        {
+          "id": "zaim|2026-07-15|娯楽/その他娯楽|644|Amazon.co.jp|【電子版限定特典付き】才女のお世話4 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）|#1",
+          "date": "2026-07-15",
+          "store": "Amazon.co.jp",
+          "item": "【電子版限定特典付き】才女のお世話4 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）",
+          "amount": 644
+        },
+        {
+          "id": "zaim|2026-07-15|娯楽/その他娯楽|-428|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-15",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -428
+        },
+        {
+          "id": "zaim|2026-07-17|娯楽/その他娯楽|663|Amazon.co.jp|【電子版限定特典付き】才女のお世話5 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）|#1",
+          "date": "2026-07-17",
+          "store": "Amazon.co.jp",
+          "item": "【電子版限定特典付き】才女のお世話5 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）",
+          "amount": 663
+        },
+        {
+          "id": "zaim|2026-07-17|娯楽/その他娯楽|-10|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-17",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -10
+        },
+        {
+          "id": "zaim|2026-07-18|娯楽/その他娯楽|693|Amazon.co.jp|【電子版限定特典付き】才女のお世話6 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）|#1",
+          "date": "2026-07-18",
+          "store": "Amazon.co.jp",
+          "item": "【電子版限定特典付き】才女のお世話6 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）",
+          "amount": 693
+        },
+        {
+          "id": "zaim|2026-07-18|娯楽/その他娯楽|-189|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-18",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -189
+        },
+        {
+          "id": "zaim|2026-07-20|娯楽/その他娯楽|713|Amazon.co.jp|【電子版限定特典付き】才女のお世話7 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）|#1",
+          "date": "2026-07-20",
+          "store": "Amazon.co.jp",
+          "item": "【電子版限定特典付き】才女のお世話7 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）",
+          "amount": 713
+        },
+        {
+          "id": "zaim|2026-07-20|娯楽/その他娯楽|-17|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-20",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -17
+        },
+        {
+          "id": "zaim|2026-07-21|娯楽/その他娯楽|713|Amazon.co.jp|【電子版限定特典付き】才女のお世話8 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）|#1",
+          "date": "2026-07-21",
+          "store": "Amazon.co.jp",
+          "item": "【電子版限定特典付き】才女のお世話8 高嶺の花だらけな名門校で、学院一のお嬢様（生活能力皆無）を陰ながらお世話することになりました （HJ文庫）",
+          "amount": 713
+        },
+        {
+          "id": "zaim|2026-07-21|娯楽/その他娯楽|-20|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-21",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -20
+        }
+      ],
       "reflection": "才女のお世話が想像以上に面白く、連日読み耽っていた。\n普段は最初に買った一冊の途中まで読んだらそれ以降読まなくなることも見越して中古本で買うのは控えていたが、今回は予想外だった。",
       "improvement": "今回のように、読み進めるかどうかは、その時のライフスタイルや興味によって変動する為予測は立てづらい所。\n電子書籍の場合、初期コストは高いが、紙の本と比較した時に管理コスト（物理的な面と、売った後に読みたくなった時の買い直しなど）は低い為、その労力分を買うという意味で捉えておくとよいかもしれない。",
       "createdAt": "2026-08-10T13:23:28.946Z",
-      "updatedAt": null
+      "updatedAt": "2026-10-12T15:30:41.298Z"
     },
     {
       "id": "bcf6c6f8-f0a4-4834-966c-75fddae83b39",
@@ -35,6 +129,7 @@
       "excessAmount": 0,
       "excessReason": "",
       "itemName": "娯楽全体について",
+      "linkedItems": [],
       "reflection": "最近、娯楽を制限しようとしすぎて無気力になり、却ってyoutubeやアニメをだらだら見ることが増えてきていた。",
       "improvement": "能動的に取り組めて、むしろエネルギーの回復に役立つ娯楽もある為、今後はそれらを見極めた上での予算・支出管理をしていくと良いかも。",
       "createdAt": "2026-08-10T13:25:55.749Z",
@@ -45,13 +140,141 @@
       "major": "生活",
       "minor": "住宅設備",
       "isExcess": true,
-      "excessAmount": 211378,
+      "excessAmount": 209745,
       "excessReason": "その他",
       "itemName": "PCパーツと関連品の購入",
+      "linkedItems": [
+        {
+          "id": "zaim|2026-07-11|住まい/(ひろ)住宅設備|14800|Amazon.co.jp|Pixio ゲーミングモニター PX246Wave ホワイト 24インチ 120hz FHD IPS HDMI ゲーミング モニター 白 ピクシオ|#1",
+          "date": "2026-07-11",
+          "store": "Amazon.co.jp",
+          "item": "Pixio ゲーミングモニター PX246Wave ホワイト 24インチ 120hz FHD IPS HDMI ゲーミング モニター 白 ピクシオ",
+          "amount": 14800
+        },
+        {
+          "id": "zaim|2026-07-11|住まい/(ひろ)住宅設備|-96|Amazon.co.jp|値引き|#1",
+          "date": "2026-07-11",
+          "store": "Amazon.co.jp",
+          "item": "値引き",
+          "amount": -96
+        },
+        {
+          "id": "zaim|2026-07-11|住まい/(ひろ)住宅設備|-148|Amazon.co.jp|割引|#1",
+          "date": "2026-07-11",
+          "store": "Amazon.co.jp",
+          "item": "割引",
+          "amount": -148
+        },
+        {
+          "id": "zaim|2026-07-11|住まい/(ひろ)住宅設備|-850|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-11",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -850
+        },
+        {
+          "id": "zaim|2026-07-11|住まい/(ひろ)住宅設備|-5209|Amazon.co.jp|ギフト券での支払い|#1",
+          "date": "2026-07-11",
+          "store": "Amazon.co.jp",
+          "item": "ギフト券での支払い",
+          "amount": -5209
+        },
+        {
+          "id": "zaim|2026-07-23|住まい/(ひろ)住宅設備|63900|Amazon.co.jp|CFD販売 デスクトップPC用メモリ DDR5-5600 （PC5-44800） 16GB×2枚 （32GB） 相性保証 288pin シー・エフ・デー販売 CFD Standard W5U5600CS-16G|#1",
+          "date": "2026-07-23",
+          "store": "Amazon.co.jp",
+          "item": "CFD販売 デスクトップPC用メモリ DDR5-5600 （PC5-44800） 16GB×2枚 （32GB） 相性保証 288pin シー・エフ・デー販売 CFD Standard W5U5600CS-16G",
+          "amount": 63900
+        },
+        {
+          "id": "zaim|2026-07-23|住まい/(ひろ)住宅設備|-61|Amazon.co.jp|ギフト券での支払い|#1",
+          "date": "2026-07-23",
+          "store": "Amazon.co.jp",
+          "item": "ギフト券での支払い",
+          "amount": -61
+        },
+        {
+          "id": "zaim|2026-07-24|住まい/(ひろ)住宅設備|32900|Amazon.co.jp|WD Blue SN5100 1TB NVMe SSD - M・2 2280 PCIe Gen 4・0 内蔵ソリッドステートドライブ - 読み取り速度 最大7,100MB/秒 PC/ノートパソコン用アップグレードストレージ - WDS100T5B0E|#1",
+          "date": "2026-07-24",
+          "store": "Amazon.co.jp",
+          "item": "WD Blue SN5100 1TB NVMe SSD - M・2 2280 PCIe Gen 4・0 内蔵ソリッドステートドライブ - 読み取り速度 最大7,100MB/秒 PC/ノートパソコン用アップグレードストレージ - WDS100T5B0E",
+          "amount": 32900
+        },
+        {
+          "id": "zaim|2026-07-24|住まい/(ひろ)住宅設備|-2260|Amazon.co.jp|割引|#1",
+          "date": "2026-07-24",
+          "store": "Amazon.co.jp",
+          "item": "割引",
+          "amount": -2260
+        },
+        {
+          "id": "zaim|2026-07-24|住まい/(ひろ)住宅設備|42899|Amazon.co.jp|AMD Ryzen 7 9700X BOX Socket AM5 / 8コア16スレッド / 3・8GHz 三年保証 日本国内発送品（ご購入時出品者の住所、評価と到着予定日をご確認ください）[並行輸入品]|#1",
+          "date": "2026-07-24",
+          "store": "Amazon.co.jp",
+          "item": "AMD Ryzen 7 9700X BOX Socket AM5 / 8コア16スレッド / 3・8GHz 三年保証 日本国内発送品（ご購入時出品者の住所、評価と到着予定日をご確認ください）[並行輸入品]",
+          "amount": 42899
+        },
+        {
+          "id": "zaim|2026-07-24|住まい/(ひろ)住宅設備|-150|Amazon.co.jp|値引き|#1",
+          "date": "2026-07-24",
+          "store": "Amazon.co.jp",
+          "item": "値引き",
+          "amount": -150
+        },
+        {
+          "id": "zaim|2026-07-24|住まい/(ひろ)住宅設備|-20|Amazon.co.jp|Amazonポイント|#1",
+          "date": "2026-07-24",
+          "store": "Amazon.co.jp",
+          "item": "Amazonポイント",
+          "amount": -20
+        },
+        {
+          "id": "zaim|2026-07-25|住まい/(ひろ)住宅設備|2952|Amazon.co.jp|SCYTHE サイズ オリジナル設計 12cm サイドフロー 虎徹 MARK4 SCKTT-4000|#1",
+          "date": "2026-07-25",
+          "store": "Amazon.co.jp",
+          "item": "SCYTHE サイズ オリジナル設計 12cm サイドフロー 虎徹 MARK4 SCKTT-4000",
+          "amount": 2952
+        },
+        {
+          "id": "zaim|2026-07-25|住まい/(ひろ)住宅設備|16980|Amazon.co.jp|ASRock マザーボード B650M Pro X3D WiFi AMD Ryzen 9000, 8000, 7000 シリーズ CPU対応 （Soket AM5） B650 Micro ATX マザーボード 【国内正規代理店品】|#1",
+          "date": "2026-07-25",
+          "store": "Amazon.co.jp",
+          "item": "ASRock マザーボード B650M Pro X3D WiFi AMD Ryzen 9000, 8000, 7000 シリーズ CPU対応 （Soket AM5） B650 Micro ATX マザーボード 【国内正規代理店品】",
+          "amount": 16980
+        },
+        {
+          "id": "mf|8BcfC5EFlpCBGRDJGhZoIFw-EgErkKKVSjSD9GyVTp4",
+          "date": "2026-07-27",
+          "store": "ビックカメラ.ｃｏｍ",
+          "item": "Microsoft ライセンスパッケージ",
+          "amount": 11930
+        },
+        {
+          "id": "zaim|2026-07-27|住まい/(ひろ)住宅設備|13363|Amazon.co.jp|Thermaltake TOUGHPOWER GT 850W Snow ATX 3・1/PCI Express 5・1対応 80PLUS GOLD PC電源ユニット ホワイト PS-TPT-0850FNFAGJ-W PS1503|#1",
+          "date": "2026-07-27",
+          "store": "Amazon.co.jp",
+          "item": "Thermaltake TOUGHPOWER GT 850W Snow ATX 3・1/PCI Express 5・1対応 80PLUS GOLD PC電源ユニット ホワイト PS-TPT-0850FNFAGJ-W PS1503",
+          "amount": 13363
+        },
+        {
+          "id": "zaim|2026-07-27|住まい/(ひろ)住宅設備|3544|Amazon.co.jp|ロジクール ワイヤレスマウス キーボード セット MK295OW 静音 耐水 無線 USB接続 Unifying非対応 MK295 オフホワイト 国内正規品|#1",
+          "date": "2026-07-27",
+          "store": "Amazon.co.jp",
+          "item": "ロジクール ワイヤレスマウス キーボード セット MK295OW 静音 耐水 無線 USB接続 Unifying非対応 MK295 オフホワイト 国内正規品",
+          "amount": 3544
+        },
+        {
+          "id": "zaim|2026-07-27|住まい/(ひろ)住宅設備|15271|Amazon.co.jp|Fractal Design Epoch White TG Clear tint ミドルタワー型PCケース 強化ガラスパネル ホワイト FD-C-EPO1A-03 CS9340|#1",
+          "date": "2026-07-27",
+          "store": "Amazon.co.jp",
+          "item": "Fractal Design Epoch White TG Clear tint ミドルタワー型PCケース 強化ガラスパネル ホワイト FD-C-EPO1A-03 CS9340",
+          "amount": 15271
+        }
+      ],
       "reflection": "パーツの高騰が続いていた＋PCの調子が悪いこともあり、当初の予定より早めにPCの導入。",
       "improvement": "月単体で見れば大幅な赤だが、数年使うものなので、それに応じて減価償却システムを採用して総合的に見れば良い買い物だったと言える。",
       "createdAt": "2026-08-10T13:30:59.721Z",
-      "updatedAt": null
+      "updatedAt": "2026-10-12T15:28:49.188Z"
     }
   ],
   "2026-08": [
@@ -63,6 +286,7 @@
       "excessAmount": 8800,
       "excessReason": "突発",
       "itemName": "奥華子チケット",
+      "linkedItems": [],
       "reflection": "新アルバムに際して地元でツアーがあったのでその場で申し込み。\n衝動買いではあったものの、一度は行ってみたかった事と、年に一度レベルの娯楽イベントとして考えておけば問題はなさそう。",
       "improvement": "チケットの購入タイミングには制約がある為、買う時は、他の支出を見直すことを検討していく。",
       "createdAt": "2026-09-07T11:40:16.132Z",
@@ -76,10 +300,33 @@
       "excessAmount": 11578,
       "excessReason": "その他",
       "itemName": "ホロライブ課金（行動反省も有）",
+      "linkedItems": [
+        {
+          "id": "mf|x8diEDey1iicGxKSR8ksVAKeRefHeX4gEDwJNiBq-oU",
+          "date": "2026-08-04",
+          "store": "Appleサービス",
+          "item": "ホロライブ課金",
+          "amount": 430
+        },
+        {
+          "id": "mf|JWKq2LP9ThNnAvCVJaZs9dJXdJFmdGcqgIXPHayQtPI",
+          "date": "2026-08-07",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9800
+        },
+        {
+          "id": "mf|qCWia0WrQjbwR8dFpuvgG_TvxPT0BBmRupO7SaALrSk",
+          "date": "2026-08-17",
+          "store": "Appleサービス",
+          "item": "ホロライブ課金",
+          "amount": 1348
+        }
+      ],
       "reflection": "8月にも星⑤確定のガチャが有償分でしか受け付けてなかった事と、初回のみのセールだった為突発的に購入。\nホロパスポートとミッションパスに関しては価値が大きい為娯楽費として考えるなら良いが、それ以外の課金額は大きかった為、月の負担が大きくなった。",
       "improvement": "機会損失に引っ張られており、目に入ると意識してしまう所がある。\nゲーム自体は楽しんで継続している一方で、やりすぎて虚無感に陥ることもある為、サンクコストの影響も受けてるかも。\nこの１か月で、１日に遊べる範囲はソシャゲーの為制限がある事に気づけたので、今後はそのラインを守りつつ、習慣の中の隙間時間にゲームが侵食してこないように見るタイミングを決めるようにした方が吉。\nゲームに対するコミットが薄くなれば、自然と課金に手を出すことも減ってくると思われる。",
       "createdAt": "2026-09-07T11:52:24.573Z",
-      "updatedAt": null
+      "updatedAt": "2026-10-12T15:05:08.701Z"
     },
     {
       "id": "e00b65f1-2326-47e4-875a-a53418052e9c",
@@ -89,10 +336,26 @@
       "excessAmount": 2200,
       "excessReason": "その他",
       "itemName": "会食入れすぎ問題",
+      "linkedItems": [
+        {
+          "id": "zaim|2026-08-14|交際費/交際費|1150|-|さくら田　食事|#1",
+          "date": "2026-08-14",
+          "store": "-",
+          "item": "さくら田　食事",
+          "amount": 1150
+        },
+        {
+          "id": "zaim|2026-08-25|交際費/交際費|1050|-|川本くん食事|#1",
+          "date": "2026-08-25",
+          "store": "-",
+          "item": "川本くん食事",
+          "amount": 1050
+        }
+      ],
       "reflection": "人との予定を入れすぎた結果、その場の食事も義務感でいることが多く、その後に疲弊して翌日まで疲れを引っ張ったりしていた。\nその為、知人との食事においては外食をOKにしていたが、これでは外食から得られる価値も大きく下がってしまう為、ただの時間とお金の無駄遣いになってしまう。\n休みの日も減っており、リカバリー日が少ない且つ休みはたいてい病院で埋まってしまう為、実質的な休みはほぼなかった。",
       "improvement": "友人との交際頻度の調整で、その時の食事を価値あるものにすることも可能になる為、支出に気を付けるというより、スケジュール調整と、実際に会食する時のセルフケアや境界線を守ることに注力することが、支出削減につながると思う。\n\n休みの日があるからと言って予定を詰めるのではなく、１日フリーの日を月に最低３日は設ける。\nその上で、知人と会う時に事前に話したい内容がそこまでない場合は長くても3時間を上限として交際するようにしていくことが課題。\n相手に納得してもらう必要がある為、伝えるのに躊躇すると思うが、自分の体調の事を話すようにして境界線は守るようにする。\n自身を守る為にこれは必須。",
       "createdAt": "2026-09-07T12:04:55.759Z",
-      "updatedAt": "2026-09-07T12:05:06.005Z"
+      "updatedAt": "2026-10-12T15:03:58.466Z"
     },
     {
       "id": "f054d896-f04f-4136-8c91-bd3492d7098a",
@@ -102,10 +365,19 @@
       "excessAmount": 0,
       "excessReason": "",
       "itemName": "ナッツグラノーラ",
+      "linkedItems": [
+        {
+          "id": "mf|VaRUWyipJM-ogmFfMd1jy44vq4u9n7XHlEBlLQQTpwk",
+          "date": "2026-08-15",
+          "store": "ホワイトフロムグリ－ン",
+          "item": "",
+          "amount": 8556
+        }
+      ],
       "reflection": "前年と同カテゴリの支出額を比較すると、約9000円の超過があり、丁度ナッツグラノーラは前年買っていなかったものだった為、そこの支出が増えていた。\n一方で、前年はサプリが多かった印象で、今年はプロテインなどのボディメイク系の商品が多い傾向。",
       "improvement": "その時のニーズによって支出が変わるのは自然なことだが、前年より超過する場合は、その他のカテゴリで調整したりすることも考える必要がある為、毎月月初 or 前月末に前年を基に予算を作った上で、それにどの程度ずれがあるか？を月2回程度は見る時間を設けた方が良いかもしれない。",
       "createdAt": "2026-09-07T12:13:13.503Z",
-      "updatedAt": null
+      "updatedAt": "2026-10-12T15:03:44.826Z"
     }
   ],
   "2025-08": [],
@@ -115,13 +387,106 @@
       "major": "娯楽",
       "minor": "その他娯楽",
       "isExcess": true,
-      "excessAmount": 85297,
+      "excessAmount": 88027,
       "excessReason": "衝動買い",
       "itemName": "ホロドリ課金",
+      "linkedItems": [
+        {
+          "id": "mf|U3_no2CwlqWLciT1Tw_71qwWcshP7xol53DJuwGzwUo",
+          "date": "2026-09-01",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 4800
+        },
+        {
+          "id": "mf|pNfFERPdxgkomfJ8ZOG9Pz6uMWJaXuB08tl6dbudF3A",
+          "date": "2026-09-26",
+          "store": "Appleサービス",
+          "item": "ホロドリメンバーシップ＋ブースト",
+          "amount": 770
+        },
+        {
+          "id": "mf|qE9c7MF0SKb6Pgs45vsj9r9soxE9h7XblKTCVa2_lpk",
+          "date": "2026-09-22",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 4800
+        },
+        {
+          "id": "mf|R4zB1-NBNDmJvVetQx_srRJ5lEl2gi3Z2tCDLGMeCQw",
+          "date": "2026-09-22",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9800
+        },
+        {
+          "id": "mf|J12rh6U3rJda4f-HQqZEb25tGp72ZYaq78vXIIF7hAE",
+          "date": "2026-09-22",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9800
+        },
+        {
+          "id": "mf|BJjppZffY6RPZTSEKx7_pc6ZGul_hi179BaryomGDE4",
+          "date": "2026-09-21",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 4800
+        },
+        {
+          "id": "mf|gNKyeMv_5nKGyMLNLC9I85Q-r1XJ1iZuSbt252JNDiQ",
+          "date": "2026-09-15",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9800
+        },
+        {
+          "id": "mf|2l2l2cRFlgUTg7zFqwcXBIfxNcQ8_1p_VHAywyZ3tdo",
+          "date": "2026-09-15",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9800
+        },
+        {
+          "id": "mf|aCNgh5ARTOz1ExL-drsD3Jj36EAHzTan5sQubk00GCY",
+          "date": "2026-09-15",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9800
+        },
+        {
+          "id": "mf|Tp0s2fT1bd2rrpKyxHAuN2AExsPOVlJ9IXej3bNoIw4",
+          "date": "2026-09-15",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9800
+        },
+        {
+          "id": "mf|e2LpXglxpLhNVYRFMDwT8g0MKsxcpprQFW2pz-IdhGk",
+          "date": "2026-09-08",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金",
+          "amount": 9097
+        },
+        {
+          "id": "mf|-EdjJ4daF3Jz-ZFgfnVXj2Z14gsPWtzxq6U9vSUTAAM",
+          "date": "2026-09-01",
+          "store": "Appleサービス",
+          "item": "ホロドリミッションパス",
+          "amount": 1960
+        },
+        {
+          "id": "mf|E0J_HrhcNvCncxoGSJhrDOmusoYTKh9bxyWLWCYbQ_8",
+          "date": "2026-09-30",
+          "store": "Appleサービス",
+          "item": "ホロドリ課金(セール分)",
+          "amount": 3000
+        }
+      ],
       "reflection": "ガチャに使いすぎた。ホロドリ内のキャラを手に入れる利点についてまだ理解できておらず、欲しいキャラが出たら都度追いかけるようになっていた。\n同等の金額で、医療脱毛などに行く余裕も作れたはずなので、機会損失もあり且つクレジットで決済している為、あと払いにして利息も発生し、月々の負担も増えてメンタルにも影響がある為、アプリ内課金をクレカで行うのはかなり危険。",
       "improvement": "①同じ金額を、自分の求めているものやサービス、もしくは「将来に自由に使える権利」を買うという意味での貯蓄として使った場合のシミュレーションをするようにする。\n\n②アプリ内課金はappカードを現金（もしくは特定のコード決済）でのみにして、app store内のクレカ情報は削除するようにして対応する。\n\n③自分が欲しいと思ったキャラが長期的に実用性に優れているのかと、それを手に入れることで生じるコストについても考えるようにする。ただし、画面を見ながら考えるとスマホに注意が向くので、スマホから離れて考えること。",
       "createdAt": "2026-10-11T13:13:49.531Z",
-      "updatedAt": null
+      "updatedAt": "2026-10-12T15:00:34.092Z"
     },
     {
       "id": "1ca4a27c-17f0-4191-b2dd-4928ca5b4256",
@@ -131,10 +496,19 @@
       "excessAmount": 16860,
       "excessReason": "その他",
       "itemName": "血液検査による突発的な高額医療費",
+      "linkedItems": [
+        {
+          "id": "mf|nRoAt5jHFlEDEei_AaRAThq-rNgfZvWhP3VfpX93ddU",
+          "date": "2026-09-11",
+          "store": "岡山大学病院［外来棟］",
+          "item": "血液検査など",
+          "amount": 16860
+        }
+      ],
       "reflection": "GIDで血液検査があり、その金額が想定より多かった。\nやむをえない支出ではあるが、今後も似た事例は起きるかもしれないので、それも踏まえて突発的な支出に備えられるバッファを作るように日々の生活の積み重ねで心がける。",
       "improvement": "①血液検査や特殊な検査が絡むことが予想される事が前月からわかっている場合、その金額をGoogleカレンダーなどのリマインドで管理するようにしておくと良いかも。",
       "createdAt": "2026-10-11T13:21:52.018Z",
-      "updatedAt": null
+      "updatedAt": "2026-10-12T14:59:42.858Z"
     }
   ]
 }

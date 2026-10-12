@@ -4,6 +4,7 @@ import { Fragment, useMemo, useState } from 'react';
 import { monthLabel, yen, percent } from '@/lib/format';
 import { MAJOR_COLORS } from '@/lib/mapping';
 import { aggregateExcess, buildExcessComparison, listYears, monthsOfYear } from '@/lib/excess';
+import TruncatedText from './TruncatedText';
 
 // 分析タブは「超過支出のビュー専用」。編集はダッシュボードの反省エディタでのみ行い、
 // ここは読み取り専用で月次／年次に集計して見せる。
@@ -159,6 +160,7 @@ export default function BudgetTab({ transactions, reflections, months, defaultMo
                 {mode === 'year' && <th>月</th>}
                 <th>分類</th>
                 <th>品名</th>
+                <th>明細</th>
                 <th className="num">金額</th>
                 <th>理由</th>
                 <th>反省点</th>
@@ -168,7 +170,7 @@ export default function BudgetTab({ transactions, reflections, months, defaultMo
             <tbody>
               {excess.entries.length === 0 && (
                 <tr>
-                  <td colSpan={mode === 'year' ? 7 : 6} className="empty">
+                  <td colSpan={mode === 'year' ? 8 : 7} className="empty">
                     該当する超過支出がありません。
                   </td>
                 </tr>
@@ -185,6 +187,14 @@ export default function BudgetTab({ transactions, reflections, months, defaultMo
                     {e.minor && ` / ${e.minor}`}
                   </td>
                   <td className="content">{e.itemName || '—'}</td>
+                  <td className="content">
+                    {!e.linkedItems?.length && '—'}
+                    {e.linkedItems?.map((x) => (
+                      <div key={x.id}>
+                        <TruncatedText text={x.item || x.store || '（名称なし）'} />
+                      </div>
+                    ))}
+                  </td>
                   <td className="num">{yen(e.excessAmount)}</td>
                   <td className="nowrap">{e.excessReason || '—'}</td>
                   <td className="content">{e.reflection || '—'}</td>
