@@ -578,6 +578,190 @@ textarea {
   min-width: 0;
 }
 
+/* 反省の対象明細ピッカー（複数選択）。 */
+.reflection-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reflection-picker-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.reflection-picker-title {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.reflection-picker-head input[type='text'] {
+  flex: 1 1 180px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 13px;
+}
+
+.reflection-picker-list {
+  max-height: 232px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.reflection-picker-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--text);
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+.reflection-picker-row:last-child {
+  border-bottom: none;
+}
+
+.reflection-picker-row:hover,
+.reflection-picker-row.selected {
+  background: var(--accent-soft);
+}
+
+.reflection-picker-row input {
+  align-self: center;
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
+.reflection-picker-date {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.reflection-picker-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.reflection-picker-store {
+  margin-left: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.reflection-picker-cat {
+  flex: 0 0 auto;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.reflection-picker-amount {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.reflection-picker-amount.neg {
+  color: var(--expense);
+}
+
+.reflection-picker-empty {
+  padding: 14px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.reflection-picked {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.reflection-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  max-width: 100%;
+  padding: 2px 4px 2px 10px;
+  font-size: 12px;
+  color: var(--text);
+  background: #fff;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  overflow-wrap: anywhere;
+}
+
+.reflection-chip-amount {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.reflection-chip button {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.reflection-chip button:hover {
+  color: var(--expense);
+}
+
+.reflection-picked-total {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin-left: 4px;
+}
+
+/* 保存済みリストの対象明細。 */
+.reflection-linked {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.reflection-linked li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+
+.reflection-linked-total {
+  font-weight: 600;
+}
+
+/* 省略表示した明細名。クリックで全文表示に切り替わる。 */
+.trunc {
+  cursor: pointer;
+  text-decoration: underline dotted var(--muted);
+  text-underline-offset: 3px;
+}
+
+.trunc:hover {
+  color: var(--accent);
+}
+
 /* 保存済みリストの超過バッジ。支出色で目立たせる。 */
 .reflection-excess-tag {
   font-size: 12px;

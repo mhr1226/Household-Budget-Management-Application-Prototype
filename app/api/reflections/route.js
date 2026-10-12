@@ -17,6 +17,21 @@ function parseEntry(entry) {
   const improvement = String(entry?.improvement ?? '').trim();
   const itemName = String(entry?.itemName ?? '').trim(); // 品名（任意）
   const isExcess = entry?.isExcess === true;
+  // 対象の明細（任意・複数可）。id の無いものは捨て、同じ明細の重複も除く。
+  const seen = new Set();
+  const linkedItems = (Array.isArray(entry?.linkedItems) ? entry.linkedItems : [])
+    .filter((x) => {
+      if (!x || typeof x.id !== 'string' || !x.id || seen.has(x.id)) return false;
+      seen.add(x.id);
+      return true;
+    })
+    .map((x) => ({
+      id: x.id,
+      date: String(x.date ?? ''),
+      store: String(x.store ?? ''),
+      item: String(x.item ?? ''),
+      amount: Number(x.amount) || 0,
+    }));
 
   if (!major) return { error: 'カテゴリ（大分類）を選択してください' };
   if (!reflection) return { error: '反省点を入力してください' };
@@ -39,7 +54,17 @@ function parseEntry(entry) {
   }
 
   return {
-    value: { major, minor, isExcess, excessAmount, excessReason, itemName, reflection, improvement },
+    value: {
+      major,
+      minor,
+      isExcess,
+      excessAmount,
+      excessReason,
+      itemName,
+      linkedItems,
+      reflection,
+      improvement,
+    },
   };
 }
 
@@ -50,7 +75,7 @@ export async function GET() {
 }
 
 // 反省エントリを1件追加する。
-// body: { month, entry: { major, minor, reflection, improvement, result } }
+// body: { month, entry: { major, minor, isExcess, excessAmount, excessReason, itemName, linkedItems, reflection, improvement } }
 export async function POST(request) {
   const body = await request.json();
   const month = String(body?.month || '').trim();
